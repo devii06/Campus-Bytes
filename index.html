@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Campus Bites — Your Campus, Your Cravings, Order Online</title>
+    <meta name="description" content="Campus Bites lets students pre-order canteen meals online, skip the queue, and pick up fresh food fast using a simple digital token system.">
+    <link rel="canonical" href="https://campus-bites-06.netlify.app/">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23527952'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'%3ECB%3C/text%3E%3C/svg%3E">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=optional"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=optional">
+    </noscript>
+</head>
+<body>
+    <!-- Floating Sprinkles / Bubbles Background -->
+<body>
+    <!-- Background Bubbles (Behind everything) -->
+    <div class="bubble-background">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- Your existing app content goes here -->
+    <div class="bg-gradient-overlay"></div>
+
+    <!-- ================= AUTHENTICATION WALL ================= -->
+    <div id="auth-container" class="auth-screen">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>Campus Bites</h1>
+                <p class="tagline">"Your Campus, Your Cravings."</p>
+            </div>
+            
+            <div class="tab-switcher">
+                <button class="tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                <button class="tab-btn" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="login-user">Username or Email</label>
+                    <input type="text" id="login-user" required placeholder="e.g. student123 or staff_admin">
+                </div>
+                <div class="form-group">
+                    <label for="login-pass">Password</label>
+                    <input type="password" id="login-pass" required placeholder="Enter password">
+                </div>
+                <div class="form-group role-select-group">
+                    <label>Select Role:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="login-role" value="student" checked> Student</label>
+                        <label><input type="radio" name="login-role" value="staff"> Staff / Admin</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-brand">Count me in ➔</button>
+                <p class="form-hint">Demo Student: <b>student123</b> / pass | Demo Staff: <b>staff123</b> / pass</p>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signup-form" class="auth-form hidden" onsubmit="handleSignup(event)">
+                <div class="form-group">
+                    <label for="signup-user">Choose Username</label>
+                    <input type="text" id="signup-user" required placeholder="Choose a username">
+                </div>
+                <div class="form-group">
+                    <label for="signup-pass">Password</label>
+                    <input type="password" id="signup-pass" required placeholder="Create password">
+                </div>
+                <div class="form-group">
+                    <label for="signup-role">Account Type</label>
+                    <select id="signup-role">
+                        <option value="student">Student</option>
+                        <option value="staff">Staff / Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-brand">Count me in ➔</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= MAIN APP CONTAINER ================= -->
+    <div id="app-container" class="app-container hidden">
+        
+        <!-- Persistent Header Navigation -->
+        <header class="site-header">
+            <div class="logo-area">
+                <p class="logo-title">Campus Bites</p>
+                <span class="badge-role" id="header-role-badge">Student Portal</span>
+            </div>
+            <nav class="main-nav">
+                <a href="#home-section" class="nav-link active">Home</a>
+                <a href="#menu-section" class="nav-link">Menu</a>
+                <a href="#cart-section" class="nav-link">Cart <span id="cart-count-badge" class="cart-badge">0</span></a>
+                <a href="#orders-section" class="nav-link">My Tokens</a>
+                <a href="#about-section" class="nav-link">About</a>
+                <a href="#contact-section" class="nav-link">Contact</a>
+                <button onclick="navigateStaffDashboard()" class="nav-link nav-link-btn hidden" id="nav-staff-btn">Staff Dashboard</button>
+                <button onclick="handleLogout()" class="btn-logout">Logout</button>
+            </nav>
+        </header>
+
+        <!-- Campaign Announcement Banner -->
+        <div id="campaign-banner" class="campaign-banner">
+            📢 <span id="campaign-text">Diwali Special menu live now! Enjoy 20% off on all festive combos.</span>
+        </div>
+
+        <!-- ================= VERTICAL SCROLL CONTENT SECTIONS ================= -->
+        <main>
+
+        <!-- 1. HOME SECTION -->
+        <section id="home-section" class="content-section">
+            <div class="hero-banner">
+                <div class="hero-content">
+                    <h2>Skip the queue. Savor the moment.</h2>
+                    <p>Pre-order your campus meals instantly, grab your token number, and pick it up hot and fresh from the counter.</p>
+                    <a href="#menu-section" class="btn-brand large btn-link">Explore Full Menu ➔</a>
+                </div>
+                <div class="hero-visual">
+                    <div class="token-preview-card">
+                        <span class="tp-label">LIVE COUNTER TOKEN</span>
+                        <h3 class="tp-number">#CB-1048</h3>
+                        <p class="tp-status status-ready">Ready for Pickup</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-container">
+                <h3 class="section-title">🌟 Today's Special Highlights (20% OFF)</h3>
+                <div id="todays-special-grid" class="menu-grid"></div>
+            </div>
+        </section>
+
+    
+
+        <!-- 2. MENU SECTION (Vertical Scrollable Categories) -->
+        <section id="menu-section" class="content-section">
+            <div class="menu-header-bar">
+                <h2>Canteen Menu & Ordering</h2>
+                <div class="search-filter-wrapper">
+                    <input type="text" id="search-input" placeholder="Pick your favorites..." oninput="renderVerticalMenu()">
+                    <select id="availability-filter" onchange="renderVerticalMenu()">
+                        <option value="all">All Items</option>
+                        <option value="available">Available Only</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="vertical-menu-container">
+                <!-- Dynamically injected category blocks with correct timings -->
+            </div>
+        </section>
+
+       
+
+        <!-- 3. CART & CHECKOUT SECTION -->
+        <section id="cart-section" class="content-section">
+            <h2>Your Food Cart & Checkout</h2>
+            <div class="cart-layout">
+                <div class="cart-items-container" id="cart-items-list"></div>
+                <div class="cart-summary-card">
+                    <h3>Order Summary</h3>
+                    <div id="cart-summary-details"></div>
+                    <hr>
+                    <div class="summary-total-row">
+                        <span>Grand Total:</span>
+                        <span id="cart-grand-total">₹0</span>
+                    </div>
+                    <div class="payment-method-box">
+                        <label>Select Payment Mode:</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="payment-mode" value="online" checked> Online (Simulated UPI)</label>
+                            <label><input type="radio" name="payment-mode" value="counter"> Pay at Counter (Offline Cash/Card)</label>
+                        </div>
+                    </div>
+                    <button class="btn-brand full-width" onclick="placeOrder()">Place Order & Get Token 🎟️</button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- 4. MY TOKENS / ORDERS SECTION -->
+        <section id="orders-section" class="content-section">
+            <h2>My Active & Past Tokens</h2>
+            <p class="section-subtitle">Show your token number at the canteen pickup counter when called.</p>
+            <div id="my-orders-list" class="orders-grid"></div>
+        </section>
+
+        
+        <!-- 5. ABOUT SECTION WITH IMAGES -->
+        <section id="about-section" class="content-section">
+            <div class="content-card">
+                <h2>About Campus Bites</h2>
+                <p>Campus Bites is the official smart dining and pre-ordering web application designed to eliminate long queues in college cafeterias. Built with speed, convenience, and hygiene in mind, students can order ahead of time, get automated digital tokens, and pick up meals seamlessly.</p>
+                
+                <div class="about-image-grid">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500&q=80" alt="Canteen Counter">
+                    <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=500&q=80" alt="Fresh Food Snacks">
+                </div>
+
+                <ul>
+                    <li>⚡ Real-time stock status tracking</li>
+                    <li>🎟️ Secure tamper-proof digital tokens</li>
+                    <li>🌱 Sage-green sustainable campus aesthetic</li>
+                </ul>
+            </div>
+        </section>
+
+     
+
+        <!-- 6. CONTACT SECTION -->
+        <section id="contact-section" class="content-section">
+            <div class="content-card">
+                <h2>Contact & Canteen Feedback</h2>
+                <p>Have dietary questions, suggestions, or facing issues with an order? Drop us a message below.</p>
+                <form id="contact-form" onsubmit="handleContactSubmit(event)">
+                    <div class="form-group">
+                        <label>Your Name / Roll No</label>
+                        <input type="text" id="contact-name" required placeholder="e.g. Alex Johnson (21BCS042)">
+                    </div>
+                    <div class="form-group">
+                        <label>Message / Query</label>
+                        <textarea id="contact-msg" rows="4" required placeholder="Type your feedback or question..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-brand">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+        </main>
+
+        <!-- STAFF DASHBOARD VIEW CONTAINER -->
+        <section id="staff-section" class="content-section staff-section-spacing hidden">
+            <div class="staff-top-bar">
+                <h2>👨‍🍳 Staff & Canteen Admin Dashboard</h2>
+                <button class="btn-secondary" onclick="openMenuManagerModal()">⚙️ Manage Menu & Specials</button>
+            </div>
+            <div class="staff-campaign-box">
+                <h3>Update Campaign Announcement Banner</h3>
+                <div class="campaign-edit-row">
+                    <input type="text" id="staff-campaign-input" placeholder="Enter new announcement banner text...">
+                    <button class="btn-brand" onclick="updateCampaignBanner()">Update Banner</button>
+                </div>
+            </div>
+            <h3 class="mt-20">Live Order Queue & Token Management</h3>
+            <div class="staff-orders-kanban" id="staff-orders-container"></div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>Campus Bites — Your Campus, Your Cravings.</p>
+                <p class="copyright">© 2026 Campus Bites. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ================= MODALS ================= -->
+    <div id="menu-manager-modal" class="modal-overlay hidden">
+        <div class="modal-card large">
+            <div class="modal-header">
+                <h3>Manage Canteen Menu & Inventory</h3>
+                <button class="btn-close" onclick="closeMenuManagerModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <h4>Add New Item</h4>
+                <form id="add-item-form" onsubmit="handleAddNewItem(event)">
+                    <div class="form-row">
+                        <input type="text" id="new-item-name" placeholder="Item Name" required>
+                        <select id="new-item-cat">
+                            <option value="Breakfast">Breakfast</option>
+                            <option value="Lunch">Lunch</option>
+                            <option value="Snacks">Snacks</option>
+                            <option value="Beverages">Beverages</option>
+                        </select>
+                        <input type="number" id="new-item-price" placeholder="Price (₹)" required>
+                    </div>
+                    <div class="form-row mt-10">
+                        <select id="new-item-stock">
+                            <option value="Available">Available</option>
+                            <option value="Only a few left">Only a few left</option>
+                            <option value="Out of stock">Out of stock</option>
+                        </select>
+                        <label><input type="checkbox" id="new-item-special"> Today's Special (20% Off)</label>
+                        <input type="text" id="new-item-img" placeholder="Image URL">
+                        <button type="submit" class="btn-brand">Add Item</button>
+                    </div>
+                </form>
+                <hr class="mt-20">
+                <h4 class="mt-20">Existing Menu Items & Stock Toggle</h4>
+                <div id="admin-menu-list" class="admin-menu-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="receipt-modal" class="modal-overlay hidden">
+        <div class="modal-card receipt-card">
+            <div class="receipt-header">
+                <h3>🧾 Campus Bites Bill & Token</h3>
+                <p id="receipt-timestamp"></p>
+            </div>
+            <div class="token-display-box">
+                <span class="t-label">YOUR TOKEN NUMBER</span>
+                <h2 id="receipt-token-num">#CB-0000</h2>
+            </div>
+            <div id="receipt-items-list" class="receipt-items"></div>
+            <div class="receipt-totals">
+                <div class="flex-between"><span>Payment Mode:</span> <strong id="receipt-pay-mode">Online</strong></div>
+                <div class="flex-between total-line"><span>Total Paid:</span> <strong id="receipt-grand-total">₹0</strong></div>
+            </div>
+            <p class="email-sent-notice">✉️ Digital receipt sent to your campus email account.</p>
+            <button class="btn-brand full-width mt-20" onclick="closeReceiptModal()">View My Tokens</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
